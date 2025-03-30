@@ -96,7 +96,24 @@ const max = async () => {
 };
 
 const maxTimeout = async () => {
-
+  const pool = new Pool(factory).allocate(1).limit(3).timeout(500);
+  const buf = await pool.capture();
+  buf.set([1]);
+  const buf2 = await pool.capture();
+  buf2.set([2]);
+  const buf3 = await pool.capture();
+  buf3.set([3]);
+  setTimeout(() => {
+    pool.release(buf);
+  }, 250);
+  const buf4 = await pool.capture();
+  assert.strictEqual(buf4, buf);
+  setTimeout(() => {
+    pool.release(buf2);
+  }, 1000);
+  assert.rejects(async () => {
+    await pool.capture();
+  });
 };
 
 const maxSignal = async () => {
@@ -124,8 +141,8 @@ const maxSignal = async () => {
   assert.strictEqual(buf4, buf3);
 };
 
-const tests = [free, wait, timeout, signal, max, maxSignal];
-// const tests = [maxSignal];
+const tests = [free, wait, timeout, signal, max, maxSignal, maxTimeout];
+
 (async () => {
   for (const test of tests) {
     await test();
