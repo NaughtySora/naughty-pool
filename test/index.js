@@ -1,6 +1,6 @@
 "use strict";
 
-const Pool = require("../lib/index.js");
+const { Pool } = require("../main");
 const assert = require("node:assert");
 
 const BYTE_8 = 2 << 2;

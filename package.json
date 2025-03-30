@@ -4,9 +4,8 @@
   "author": "NaughtySora <naughtysora@proton.me>",
   "license": "MIT",
   "main": "main.js",
-  "description": "Nodejs async pool",
   "types": "main.d.ts",
-  "readmeFilename": "README.md",
+  "description": "Nodejs async pool",
   "keywords": [
     "nodejs",
     "async",
@@ -14,6 +13,7 @@
     "signal",
     "timeout"
   ],
+  "readmeFilename": "README.md",
   "files": [
     "lib/",
     "main.d.ts"
