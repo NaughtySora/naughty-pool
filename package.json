@@ -1,0 +1,40 @@
+{
+  "name": "naughty-pool",
+  "version": "0.1.0",
+  "author": "NaughtySora <naughtysora@proton.me>",
+  "license": "MIT",
+  "main": "main.js",
+  "description": "Nodejs async pool",
+  "types": "main.d.ts",
+  "readmeFilename": "README.md",
+  "keywords": [
+    "nodejs",
+    "async",
+    "pool",
+    "signal",
+    "timeout"
+  ],
+  "files": [
+    "lib/",
+    "main.d.ts"
+  ],
+  "engines": {
+    "node": "18 || 19 || 20 || 21 || 22 || 23"
+  },
+  "scripts": {
+    "types": "tsc -p ./tsconfig.json",
+    "test": "node ./test/index.js"
+  },
+  "homepage": "https://github.com/NaughtySora/naughty-pool#readme",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/NaughtySora/naughty-pool.git"
+  },
+  "bugs": {
+    "url": "https://github.com/NaughtySora/naughty-pool/issues"
+  },
+  "devDependencies": {
+    "@types/node": "^22.13.14",
+    "typescript": "^5.8.2"
+  }
+}
