@@ -6,4 +6,5 @@ export class Pool<F extends Factory> {
   release(entity: ReturnType<F>): void;
   capture(): Promise<ReturnType<F>>;
   timeout(ms: number): this;
+  limit(max: number): this;
 }
