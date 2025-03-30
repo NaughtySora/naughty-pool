@@ -59,12 +59,47 @@ const timeout = async () => {
   assert.strictEqual(buf3, buf2);
 };
 
-const signal = async () => { };
-const max = () => { };
-const maxTimeout = () => { };
-const maxSignal = () => { };
+const signal = async () => {
+  const pool = new Pool(factory).allocate(1);
+  const buf = await pool.capture();
+  buf.set([1, 255, 3]);
+  setTimeout(() => {
+    pool.release(buf);
+  }, 500);
+  assert.rejects(async () => {
+    await pool.capture({ signal: AbortController.timeout(200) });
+  });
+  assert.rejects(async () => {
+    const controller = new AbortController();
+    setTimeout(() => {
+      controller.abort();
+    }, 10);
+    await pool.capture({ signal: controller.signal });
+  });
+  const buf2 = await pool.capture();
+  assert.strictEqual(buf2, buf);
+};
 
-const tests = [free, wait, timeout];
+const max = async () => {
+  const pool = new Pool(factory).allocate(1).limit(3);
+  const buf = await pool.capture();
+  buf.set([1]);
+  const buf2 = await pool.capture();
+  buf2.set([2]);
+  const buf3 = await pool.capture();
+  buf3.set([3]);
+  setTimeout(() => {
+    pool.release(buf2);
+  }, 250);
+  const buf4 = await pool.capture();
+  assert.strictEqual(buf2, buf4);
+};
+
+const maxTimeout = async () => { };
+
+const maxSignal = async () => { };
+
+const tests = [free, wait, timeout, signal, max];
 
 (async () => {
   for (const test of tests) {
