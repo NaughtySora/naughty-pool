@@ -1,9 +1,10 @@
 # Naughty Pool
+[![license](https://img.shields.io/github/license/NaughtySora/naughty-pool)](https://github.com/NaughtySora/naughty-pool/blob/master/LICENSE)
+[![snyk](https://snyk.io/test/github/NaughtySora/naughty-pool/badge.svg)](https://snyk.io/test/github/NaughtySora/naughty-pool)
 
 ## Usage
 - Install: `npm install naughty-pool`
-- Require: `const pool = require('naughty-pool')`
-
+- Require: `const { Pool } = require('naughty-pool')`
 
 ```js
 const BYTES = 8;
