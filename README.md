@@ -24,7 +24,7 @@ const buffer = await pool.capture({ signal });
 const { createPublicClient, http } = require('viem');
 const { mainnet } = require('viem/chains');
 const client = (params) => createPublicClient(params);
-const client_pool = new Pool(client, { chain: mainnet, transport: http("RPC")});
+const client_pool = new Pool(client, { chain: mainnet, transport: http("RPC")}).allocate(3);
 
 const client = await client_pool.capture();
 const blockNumber = await client.getBlockNumber();
