@@ -6,7 +6,6 @@
 - Install: `npm install naughty-pool`
 - Require: `const { Pool } = require('naughty-pool')`
 
-
 ```js
 const BYTES = 8;
 const MINUTE = 60 * 1000;
