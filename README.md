@@ -1,6 +1,9 @@
 # Naughty Pool
 [![license](https://img.shields.io/github/license/NaughtySora/naughty-pool)](https://github.com/NaughtySora/naughty-pool/blob/master/LICENSE)
 [![snyk](https://snyk.io/test/github/NaughtySora/naughty-pool/badge.svg)](https://snyk.io/test/github/NaughtySora/naughty-pool)
+[![npm version](https://badge.fury.io/js/naughty-pool.svg)](https://badge.fury.io/js/naughty-pool)
+[![NPM Downloads](https://img.shields.io/npm/dm/naughty-pool)](https://www.npmjs.com/package/naughty-pool)
+[![NPM Downloads](https://img.shields.io/npm/dt/naughty-pool)](https://www.npmjs.com/package/naughty-pool)
 
 ## Usage
 - Install: `npm install naughty-pool`
@@ -25,15 +28,15 @@ const buffer = await pool.capture({ signal });
 const { createPublicClient, http } = require('viem');
 const { mainnet } = require('viem/chains');
 const options = { chain: mainnet, transport: http("RPC") };
-const client_pool = new Pool(createPublicClient, options).allocate(3);
+const clientPool = new Pool(createPublicClient, options).allocate(3);
 
-const client = await client_pool.capture();
+const client = await clientPool.capture();
 const blockNumber = await client.getBlockNumber();
 ```
 
 ## Pool
 - `constructor(factory: F, ...args: Parameters<F>)`
-- `allocate(min: number, max?: number): this`
+- `allocate(min: number): this`
 - `release(entity: ReturnType<F>): void`
 - `capture(options?: CaptureOptions): Promise<ReturnType<F>>`
 - `timeout(ms: number): this`
