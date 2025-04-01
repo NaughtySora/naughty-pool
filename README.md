@@ -1,6 +1,9 @@
 # Naughty Pool
 [![license](https://img.shields.io/github/license/NaughtySora/naughty-pool)](https://github.com/NaughtySora/naughty-pool/blob/master/LICENSE)
 [![snyk](https://snyk.io/test/github/NaughtySora/naughty-pool/badge.svg)](https://snyk.io/test/github/NaughtySora/naughty-pool)
+[![npm version](https://badge.fury.io/js/naughty-pool.svg)](https://badge.fury.io/js/naughty-pool)
+[![NPM Downloads](https://img.shields.io/npm/dm/naughty-pool)](https://www.npmjs.com/package/naughty-pool)
+[![NPM Downloads](https://img.shields.io/npm/dt/naughty-pool)](https://www.npmjs.com/package/naughty-pool)
 
 ## Usage
 - Install: `npm install naughty-pool`
