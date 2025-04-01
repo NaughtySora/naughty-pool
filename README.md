@@ -32,6 +32,7 @@ const clientPool = new Pool(createPublicClient, options).allocate(3);
 
 const client = await clientPool.capture();
 const blockNumber = await client.getBlockNumber();
+clientPool.release(client);
 ```
 
 ## Pool
