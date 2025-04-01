@@ -25,15 +25,15 @@ const buffer = await pool.capture({ signal });
 const { createPublicClient, http } = require('viem');
 const { mainnet } = require('viem/chains');
 const options = { chain: mainnet, transport: http("RPC") };
-const client_pool = new Pool(createPublicClient, options).allocate(3);
+const clientPool = new Pool(createPublicClient, options).allocate(3);
 
-const client = await client_pool.capture();
+const client = await clientPool.capture();
 const blockNumber = await client.getBlockNumber();
 ```
 
 ## Pool
 - `constructor(factory: F, ...args: Parameters<F>)`
-- `allocate(min: number, max?: number): this`
+- `allocate(min: number): this`
 - `release(entity: ReturnType<F>): void`
 - `capture(options?: CaptureOptions): Promise<ReturnType<F>>`
 - `timeout(ms: number): this`
