@@ -18,7 +18,7 @@
 - `limit(max: number): this;`
 - `size: number;`
 - `free: number;`
-- `[Symbol.dispose](): void`
+- `[Symbol.dispose](): void;`
 
 ```js
 const BYTES = 8;

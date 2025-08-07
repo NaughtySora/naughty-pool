@@ -223,5 +223,5 @@ const factory = () => Buffer.alloc(BYTES);
       assert.strictEqual(p.size, 0);
       assert.strictEqual(p.free, 0);
     });
-  })
+  });
 })();
