@@ -11,3 +11,11 @@
 
 - fix typing with allocate function
 - change readme
+
+## [0.2.0] - 2025-08-07
+
+- better signal handling
+- disposable
+- size, free getters
+- hiding private fields
+- tests
