@@ -11,4 +11,7 @@ export class Pool<F extends Factory> {
   capture(options?: CaptureOptions): Promise<ReturnType<F>>;
   timeout(ms: number): this;
   limit(max: number): this;
+  size: number;
+  free: number;
+  [Symbol.dispose](): void;
 }

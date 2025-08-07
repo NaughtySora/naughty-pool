@@ -9,6 +9,17 @@
 - Install: `npm install naughty-pool`
 - Require: `const { Pool } = require('naughty-pool')`
 
+## Types
+- `constructor(factory: F, ...args: Parameters<F>);`
+- `allocate(min: number): this;`
+- `release(entity: ReturnType<F>): void;`
+- `capture(options?: CaptureOptions): Promise<ReturnType<F>>;`
+- `timeout(ms: number): this;`
+- `limit(max: number): this;`
+- `size: number;`
+- `free: number;`
+- `[Symbol.dispose](): void`
+
 ```js
 const BYTES = 8;
 const MINUTE = 60 * 1000;
@@ -35,12 +46,17 @@ const blockNumber = await client.getBlockNumber();
 clientPool.release(client);
 ```
 
-## Pool
-- `constructor(factory: F, ...args: Parameters<F>)`
-- `allocate(min: number): this`
-- `release(entity: ReturnType<F>): void`
-- `capture(options?: CaptureOptions): Promise<ReturnType<F>>`
-- `timeout(ms: number): this`
-- `limit(max: number): this`
+```js
+  // Node >= 24.x
+  {
+    await using pool = new Pool(factory).allocate(2);
+  } // disposed here
+
+  // Node < 24.x
+  {
+    const pool = new Pool(factory).allocate(2);
+    pool[Symbol.dispose](); // disposed here
+  }
+```
 
 ## Part of the naughty stack
