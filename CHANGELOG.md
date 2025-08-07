@@ -17,4 +17,5 @@
 - better signal handling
 - disposable
 - size, free getters
+- hiding private fields
 - tests
