@@ -1,15 +1,15 @@
 'use strict';
 
 const { Pool } = require('../main');
-const assert = require('node:assert');
 const { it, describe } = require('node:test');
+const assert = require('node:assert/strict');
 
 const BYTES = 8;
 const factory = () => Buffer.alloc(BYTES);
 
-(async () => {
-  describe('capture', () => {
-    it('essential', async () => {
+describe('Pool', async () => {
+  await describe('capture', async () => {
+    await it('essential', async () => {
       const pool = new Pool(factory).allocate(3);
       const buf = await pool.capture();
       buf.set([1, 255, 3]);
@@ -20,19 +20,19 @@ const factory = () => Buffer.alloc(BYTES);
       pool.release(buf2);
       const buf4 = await pool.capture();
       pool.release(buf);
-      assert.strictEqual(buf2, buf4);
+      assert.equal(buf2, buf4);
       const buf5 = await pool.capture();
-      assert.strictEqual(buf, buf5);
+      assert.equal(buf, buf5);
       pool.release(buf3);
       const buf6 = await pool.capture();
-      assert.strictEqual(buf3, buf6);
+      assert.equal(buf3, buf6);
       pool.release(buf4);
       pool.release(buf5);
       pool.release(buf6);
     });
 
-    it('timeout', async () => {
-      {
+    await it('timeout', async () => {
+      await it('capture', async () => {
         const pool = new Pool(factory).allocate(1).timeout(300);
         const buf = await pool.capture();
         buf.set([1, 255, 3]);
@@ -42,9 +42,8 @@ const factory = () => Buffer.alloc(BYTES);
         assert.rejects(async () => {
           await pool.capture();
         }, { message: 'Waiting timeout' });
-      }
-
-      {
+      });
+      await it('capture/release', async () => {
         const pool = new Pool(factory).allocate(1).timeout(500);
         const buf2 = await pool.capture();
         buf2.set([1, 255, 3]);
@@ -52,11 +51,11 @@ const factory = () => Buffer.alloc(BYTES);
           pool.release(buf2);
         }, 100);
         const buf3 = await pool.capture();
-        assert.strictEqual(buf3, buf2);
-      }
+        assert.equal(buf3, buf2);
+      });
     });
 
-    it('signal', async () => {
+    await it('signal', async () => {
       const pool = new Pool(factory).allocate(1);
       const buf = await pool.capture();
       buf.set([1, 255, 3]);
@@ -74,10 +73,10 @@ const factory = () => Buffer.alloc(BYTES);
         await pool.capture({ signal: controller.signal });
       }, { message: 'Signal aborted' });
       const buf2 = await pool.capture();
-      assert.strictEqual(buf2, buf);
+      assert.equal(buf2, buf);
     });
 
-    it('waiting', async () => {
+    await it('waiting', async () => {
       const pool = new Pool(factory).allocate(1);
       const buf = await pool.capture();
       buf.set([1, 255, 3]);
@@ -85,30 +84,30 @@ const factory = () => Buffer.alloc(BYTES);
         pool.release(buf);
       }, 2000);
       const buf2 = await pool.capture();
-      assert.strictEqual(buf2, buf);
+      assert.equal(buf2, buf);
       setTimeout(() => {
         pool.release(buf2);
       }, 1500);
       const buf3 = await pool.capture();
-      assert.strictEqual(buf3, buf2);
+      assert.equal(buf3, buf2);
     });
   });
 
-  describe('allocate', () => {
-    it('manual', async () => {
+  await describe('allocate', async () => {
+    await it('manual', async () => {
       const pool = new Pool(factory).allocate(1);
       const buf = await pool.capture();
       pool.allocate(2);
       pool.release(buf);
       const buf2 = await pool.capture();
-      assert.notStrictEqual(buf, buf2);
+      assert.notEqual(buf, buf2);
       await pool.capture();
       pool.allocate(2);
       await pool.capture({ signal: AbortSignal.timeout(0) });
       await pool.capture({ signal: AbortSignal.timeout(0) });
     });
 
-    it('limit', async () => {
+    await it('limit', async () => {
       const pool = new Pool(factory).allocate(1).limit(3);
       const buf = await pool.capture();
       buf.set([1]);
@@ -120,10 +119,10 @@ const factory = () => Buffer.alloc(BYTES);
         pool.release(buf2);
       }, 250);
       const buf4 = await pool.capture();
-      assert.strictEqual(buf2, buf4);
+      assert.equal(buf2, buf4);
     });
 
-    it('limit/timeout', async () => {
+    await it('limit/timeout', async () => {
       const pool = new Pool(factory).allocate(1).limit(3).timeout(500);
       const buf = await pool.capture();
       buf.set([1]);
@@ -135,7 +134,7 @@ const factory = () => Buffer.alloc(BYTES);
         pool.release(buf);
       }, 250);
       const buf4 = await pool.capture();
-      assert.strictEqual(buf4, buf);
+      assert.equal(buf4, buf);
       setTimeout(() => {
         pool.release(buf2);
       }, 1000);
@@ -144,7 +143,7 @@ const factory = () => Buffer.alloc(BYTES);
       }, { message: 'Waiting timeout' });
     });
 
-    it('limit/timeout/signal', async () => {
+    await it('limit/timeout/signal', async () => {
       const pool = new Pool(factory).allocate(1).limit(3).timeout(500);
       const buf = await pool.capture();
       buf.set([1]);
@@ -166,43 +165,51 @@ const factory = () => Buffer.alloc(BYTES);
         await pool.capture({ signal: controller.signal });
       }, { message: 'Signal aborted' });
       const buf4 = await pool.capture();
-      assert.strictEqual(buf4, buf3);
+      assert.equal(buf4, buf3);
+    });
+
+    it('negative amount', () => {
+      assert.throws(() => {
+        new Pool().allocate(-3);
+      }, { message: "Pool requires positive integer" });
     });
   });
 
-  describe('release', () => {
-    if ('essential', async () => {
-      const pool = new Pool(factory).allocate(2);
-      const buf = await pool.capture();
-      pool.release({ a: 1 });
-      pool.release(Buffer.from([0, 0, 0]));
-      pool.release('');
-      pool.release(null);
-      assert.strictEqual(pool.free, 1);
-      assert.strictEqual(pool.size, 2);
-      pool.release(buf);
-      assert.strictEqual(pool.free, pool.size);
-    });
+  await describe('release', async () => {
+    const pool = new Pool(factory).allocate(2);
+    const buf = await pool.capture();
+    pool.release({ a: 1 });
+    pool.release(Buffer.from([0, 0, 0]));
+    pool.release('');
+    pool.release(null);
+    assert.equal(pool.free, 1);
+    assert.equal(pool.size, 2);
+    pool.release(buf);
+    assert.equal(pool.free, pool.size);
   });
 
-  describe('Dispose', () => {
-    it('manual', async () => {
-      const pool = new Pool(factory).allocate(3);
+  await describe('Dispose', async () => {
+    await it('manual', async () => {
+      const pool = new Pool(factory).allocate(3).timeout(1000);
       setTimeout(() => {
         pool[Symbol.dispose]();
+        assert.equal(pool.size, 0);
+        assert.equal(pool.free, 0);
       }, 1000);
-      const buf = await pool.capture();
-      buf.set([1, 2, 4]);
+      (await pool.capture()).set([1, 2, 4]);
       await pool.capture();
       await pool.capture();
       assert.rejects(async () => {
         await pool.capture();
       }, { message: 'Pool disposed' });
     });
-    it('manual signal', async () => {
+
+    await it('manual signal', async () => {
       const pool = new Pool(factory).allocate(3);
       setTimeout(() => {
         pool[Symbol.dispose]();
+        assert.equal(pool.size, 0);
+        assert.equal(pool.free, 0);
       }, 1000);
       const buf = await pool.capture();
       buf.set([1, 2, 4]);
@@ -213,15 +220,16 @@ const factory = () => Buffer.alloc(BYTES);
         await pool.capture({ signal: controller.signal });
       }, { message: 'Signal aborted' });
     });
-    it('using Node 24.x', async () => {
+
+    await it('using Node 24.x', async () => {
       let p = null;
       {
         await using pool = new Pool(factory).allocate(2);
         await pool.capture();
         p = pool;
       }
-      assert.strictEqual(p.size, 0);
-      assert.strictEqual(p.free, 0);
+      assert.equal(p.size, 0);
+      assert.equal(p.free, 0);
     });
   });
-})();
+})
