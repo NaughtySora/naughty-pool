@@ -19,3 +19,7 @@
 - size, free getters
 - hiding private fields
 - tests
+
+## [0.2.1] - 2025-10-17
+
+- test coverage
